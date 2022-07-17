@@ -9,15 +9,16 @@ INITFILL = "black"
 FILL = "white"
 active_card = {}
 to_learn = {}
-#
-# try:
-#     french_words = pandas.read_csv("./data/words_to_learn.csv")
-# except FileNotFoundError:
-#     original_data = pandas.read_csv("./data/french_words.csv")
-# else:
-#     to_learn = french_words.to_dict(orient="records")
-# # french_words.to_dict()
-# # Break up so that each entry becomes their own dictionary
+
+try:
+    french_words = pandas.read_csv("./data/words_to_learn.csv")
+except FileNotFoundError:
+    original_data = pandas.read_csv("./data/french_words.csv")
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = french_words.to_dict(orient="records")
+# french_words.to_dict()
+# Break up so that each entry becomes their own dictionary
 
 
 def next_card():
@@ -37,11 +38,11 @@ def flip_card():
     canvas.itemconfig(card_showing_img, image=card_back_shots)
 
 
-# def is_a_goodie():
-#     to_learn.remove(active_card)
-#     data = pandas.DataFrame(to_learn)
-#     data.to_csv("data/words_to_learn.csv")
-#     next_card()
+def is_a_goodie():
+    to_learn.remove(active_card)
+    data = pandas.DataFrame(to_learn)
+    data.to_csv("data/words_to_learn.csv", index=False)
+    next_card()
 
 
 window = Tk()
@@ -65,7 +66,7 @@ cross_image_button = Button(image=cross_image, highlightthickness=0, command=nex
 cross_image_button.grid(row=1, column=0)
 
 check_image = PhotoImage(file="./images/right.png")
-check_image_button = Button(image=check_image, highlightthickness=0, command=next_card)
+check_image_button = Button(image=check_image, highlightthickness=0, command=is_a_goodie)
 check_image_button.grid(row=1, column=2)
 
 next_card()
